@@ -67,6 +67,6 @@ server.listen(config.port_server, config.ip_server);
 
 // print some details for the admin / dev
 log.info("Server running at http://" + config.ip_server + ":" + config.port_server + "/");
-log.debug("Register your client with HARDAC that url: http://" + config.ip_server + ":" + config.port_server + "/device_id/r/public_key/");
-log.debug("Check commands for your client at url: http://" + config.ip_server + ":" + config.port_server + "/device_id/s/");
-log.debug("Vote for your client at url: http://" + config.ip_server + ":" + config.port_server + "/device_id/v/ballot");
+log.debug("Register your client with HARDAC at that url: http://" + config.ip_server + ":" + config.port_server + "/device_id/r/public_key/");
+log.debug("Check commands for your client at this url: http://" + config.ip_server + ":" + config.port_server + "/device_id/s/");
+log.debug("Vote for your client at this url: http://" + config.ip_server + ":" + config.port_server + "/device_id/v/ballot");

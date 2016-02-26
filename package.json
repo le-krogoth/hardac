@@ -4,7 +4,8 @@
   "description": "hardac",
   "main": "server.js",
   "scripts": {
-    "test": "tape test/*.js | faucet"
+    "test": "tape test/*.js | faucet",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",

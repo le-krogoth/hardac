@@ -21,7 +21,14 @@ var config =
     ip_server: "127.0.0.1",
 
     // port to bind to
-    port_server: 8765
+    port_server: 8765,
+
+    db_name: "hardac",
+    db_uid: "user",
+    db_pwd: "pwd",
+    db_dialect: "sqlite",
+    db_logging: false,
+    db_storage: "hardac.sqlite"
 };
 
 module.exports = {
