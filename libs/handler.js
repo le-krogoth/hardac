@@ -25,7 +25,7 @@ function registerDevice(req, res, deviceid, publickey)
     if(deviceid == undefined || publickey == undefined)
     {
         // Bad Request
-        res.writeHead(400, {'Content-Type': 'text/plain'});
+        res.writeHead(400, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '400'});
         res.end("Not all parameters were given.");
         return;
     }
@@ -36,7 +36,7 @@ function registerDevice(req, res, deviceid, publickey)
         {
             log.debug('Created new PJ: ' + JSON.stringify(pj, null, 4));
 
-            res.writeHead(201, {'Content-Type': 'text/plain'});
+            res.writeHead(201, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '201'});
             res.end("Welcome at the HARDAC, " + deviceid);
         }
         else
@@ -44,7 +44,7 @@ function registerDevice(req, res, deviceid, publickey)
             // this device already registered and can't register again
             log.debug('Device wanted to re-register: ' + JSON.stringify(pj, null, 4));
 
-            res.writeHead(420, {'Content-Type': 'text/plain'});
+            res.writeHead(420, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '420'});
             res.statusMessage = 'Enhance Your Calm';
             res.end("Stay calm");
             return;
@@ -63,7 +63,7 @@ function getStatus(req, res, deviceid)
     if(deviceid == undefined || deviceid == null)
     {
         // Bad Request
-        res.writeHead(400, {'Content-Type': 'text/plain'});
+        res.writeHead(400, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '400'});
         res.end("Not all parameters were given.");
         return;
     }
@@ -74,7 +74,7 @@ function getStatus(req, res, deviceid)
         {
             log.debug('Device not found: ' + deviceid);
 
-            res.writeHead(403, {'Content-Type': 'text/plain'});
+            res.writeHead(403, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '403'});
             res.end("Register first at the HARDAC");
             return;
         }
@@ -82,7 +82,7 @@ function getStatus(req, res, deviceid)
         {
             log.debug('Device wants status: ' + deviceid);
 
-            res.writeHead(200, {'Content-Type': 'text/plain'});
+            res.writeHead(200, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '200'});
 
             var colour = "{ \"colour_1\": \"" + pj.led1 + "\", \"colour_2\": \"" + pj.led2 + "\" }";
 
@@ -104,7 +104,7 @@ function vote(req, res, deviceid, ufballot)
     if(deviceid == undefined || deviceid == null || ufballot == undefined || ufballot == null)
     {
         // Bad Request
-        res.writeHead(400, {'Content-Type': 'text/plain'});
+        res.writeHead(400, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '400'});
         res.end("Not all parameters were given.");
         return;
     }
@@ -114,7 +114,7 @@ function vote(req, res, deviceid, ufballot)
     if(ballot == '' || ballot.length > 4)
     {
         // Bad Request
-        res.writeHead(400, {'Content-Type': 'text/plain'});
+        res.writeHead(400, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '400'});
         res.end("Not all parameters were given or within accepted range.");
         return;
     }
@@ -125,7 +125,7 @@ function vote(req, res, deviceid, ufballot)
         {
             log.debug('Device not found: ' + deviceid);
 
-            res.writeHead(403, {'Content-Type': 'text/plain'});
+            res.writeHead(403, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '403'});
             res.end("Register first at the HARDAC");
             return;
         }
@@ -133,7 +133,7 @@ function vote(req, res, deviceid, ufballot)
         {
             log.debug('Device wants to vote: ' + deviceid);
 
-            res.writeHead(202, {'Content-Type': 'text/plain'});
+            res.writeHead(202, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '202'});
             res.end("Ballot accepted");
         }
 
@@ -154,7 +154,7 @@ function onBypass(req, res, path)
 
     // send out some help text to get started
     // todo: remove me in production?
-    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.writeHead(200, {'Content-Type': 'text/html', 'HARDAC-STATUS': '200'});
     res.write("<!doctype html>\n\r<html lang=en>\n\r<head>\n\r<meta charset=utf-8>\n\r<title>HARDAC</title>\n\r</head>\n\r");
     res.write("<body>\n\r");
 
