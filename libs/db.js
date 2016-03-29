@@ -32,8 +32,8 @@ var sequelize = new Sequelize(config.db_name, config.db_uid, config.db_pwd, {
 
 var PJ = sequelize.define('pj', {
     deviceId: { type: Sequelize.STRING, allowNull: false, unique: true, primaryKey: true},
-    led1: { type: Sequelize.STRING, allowNull: false, defaultValue: "R"},
-    led2: { type: Sequelize.STRING, allowNull: false, defaultValue: "B"},
+    led1: { type: Sequelize.STRING, allowNull: false, defaultValue: "F0020002F0020002F0020002"},
+    led2: { type: Sequelize.STRING, allowNull: false, defaultValue: "0F0200020F0200020F020002"},
     ballot: { type: Sequelize.INTEGER, allowNull: false, defaultValue: 0},
     lastSeen: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW }
 });
