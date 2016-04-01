@@ -35,6 +35,7 @@ var PJ = sequelize.define('pj', {
     led1: { type: Sequelize.STRING, allowNull: false, defaultValue: "F0020002F0020002F0020002"},
     led2: { type: Sequelize.STRING, allowNull: false, defaultValue: "0F0200020F0200020F020002"},
     ballot: { type: Sequelize.INTEGER, allowNull: false, defaultValue: 0},
+    cycleLength: { type: Sequelize.INTEGER, allowNull: false, defaultValue: 1000},
     lastSeen: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW }
 });
 

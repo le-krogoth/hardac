@@ -84,16 +84,18 @@ function getStatus(req, res, deviceid)
 
             res.writeHead(200, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '200'});
 
-            var colour = "{ \"colour_1\": \"" + pj.led1 + "\", \"colour_2\": \"" + pj.led2 + "\" }";
+            var json = "{ \"colour_1\": \"" + pj.led1 + "\", \"colour_2\": \"" + pj.led2 + "\", \"cycle_length\": \"" + pj.cycleLength + "\" }";
 
-            res.end(colour);
+            log.debug('Charcount: ' + json.length);
+
+            res.end(json);
         }
 
         pj.lastSeen = Date.now();
 
         pj.save().then(function()
         {
-            log.info('PJ ' + deviceid + ' lastSeen updated');
+            log.info('PJ ' + deviceid + ' lastSeen updated: ' + pj.lastSeen);
         });
     });
 }
