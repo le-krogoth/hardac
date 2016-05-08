@@ -19,9 +19,11 @@ var config =
 {
     // ip to bind to, use 0.0.0.0 to bind to all
     ip_server: "127.0.0.1",
+    ip_admin: "127.0.0.1",
 
     // port to bind to
     port_server: 8765,
+    port_admin: 8080,
 
     db_name: "hardac",
     db_uid: "user",
