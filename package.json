@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "tape test/*.js | faucet",
-    "start": "node server.js"
+    "start": "node server.js",
+    "admin": "node admin.js"
   },
   "repository": {
     "type": "git",
