@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>HARDAC</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    ––––––––––––––––––––––––––––––––––––––––––––––––––
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+    -->
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="/s/css/normalize.css">
+    <link rel="stylesheet" href="/s/css/skeleton.css">
+    <link rel="stylesheet" href="/s/css/c3.min.css">
+    <link rel="stylesheet" href="/s/css/hardac.css">
+
+    <!-- Load c3.css -->
+    <link href="/s/css/c3.css" rel="stylesheet" type="text/css">
+
+    <!-- Load d3.js and c3.js -->
+    <script src="/s/js/d3.min.js" charset="utf-8"></script>
+    <script src="/s/js/c3.min.js"></script>
+
+    <!-- Favicon
+    ––––––––––––––––––––––––––––––––––––––––––––––––––
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    -->
+</head>
+<body>
+
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div class="section get-help">
+    <div class="container">
+        <h3 class="section-heading">Hardac</h3>
+    </div>
+</div>
+
+<div class="navbar-spacer"></div>
+<nav class="navbar">
+    <div class="container">
+        <ul class="navbar-list">
+            <li class="navbar-item"><a class="navbar-link" href="#overview">Overview</a></li>
+            <li class="navbar-item"><a class="navbar-link" href="#votes">Votes</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="one-half column">
+            <h4>Registered PJs</h4>
+            <p>An overview of the number of registered PJs.</p>
+            <div id="chartRegPJ"></div>
+        </div>
+        <div class="one-half column">
+            <h4>Active PJs</h4>
+            <p>An overview of the active  PJs.</p>
+            <div id="chartActivePJ"></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var chartRegPJ = c3.generate({
+        data: {
+            url: '/data/query2',
+            mimeType: 'json',
+            type: 'line'
+        },
+        bindto: d3.select('#chartRegPJ')
+    });
+
+    var chartActivePJ = c3.generate({
+        data: {
+            url: '/data/query2',
+            mimeType: 'json',
+            type: 'line'
+
+        },
+        bindto: d3.select('#chartActivePJ')
+    });
+
+    /*
+    setTimeout(function () {
+        chart.groups([['data1', 'data2', 'data3']])
+    }, 1000);
+
+    setTimeout(function () {
+        chart.load({
+            columns: [['data4', 100, -50, 150, 200, -300, -100]]
+        });
+    }, 1500);
+
+    setTimeout(function () {
+        chart.groups([['data1', 'data2', 'data3', 'data4']])
+    }, 2000);
+*/
+</script>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
