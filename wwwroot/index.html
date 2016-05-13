@@ -77,21 +77,33 @@
 
     var chartRegPJ = c3.generate({
         data: {
-            url: '/data/query2',
+            url: '/data/registeredPJs',
             mimeType: 'json',
-            type: 'line'
+            type: 'bar'
         },
-        bindto: d3.select('#chartRegPJ')
+        bindto: d3.select('#chartRegPJ'),
+        axis: {
+            x: {
+                type: 'category',
+                categories: ['users', 'speakers', 'staff', 'goons']
+            }
+        }
     });
 
     var chartActivePJ = c3.generate({
         data: {
-            url: '/data/query2',
+            url: '/data/activePJs',
             mimeType: 'json',
-            type: 'line'
+            type: 'bar'
 
         },
-        bindto: d3.select('#chartActivePJ')
+        bindto: d3.select('#chartActivePJ'),
+        axis: {
+            x: {
+                type: 'category',
+                categories: ['30 minutes', '2 hrs', '5 hrs', '1 day', 'longer']
+            }
+        }
     });
 
     /*

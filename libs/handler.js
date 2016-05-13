@@ -15,9 +15,11 @@
  ====================================================================
  */
 
+var util = require('util');
 var log = require('./log').log;
 var config = require('../config').config;
 var PJ = require('./db').PJ;
+
 
 // tries to register new device and sends an error if device is registered already
 function registerDevice(req, res, deviceid, publickey)
@@ -82,11 +84,12 @@ function getStatus(req, res, deviceid)
         {
             log.debug('Device wants status: ' + deviceid);
 
-            res.writeHead(200, {'Content-Type': 'text/plain', 'HARDAC-STATUS': '200'});
+            res.writeHead(200, {'Content-Type': 'application/json', 'HARDAC-STATUS': '200'});
 
-            var json = "{ \"colour_1\": \"" + pj.led1 + "\", \"colour_2\": \"" + pj.led2 + "\", \"cycle_length\": \"" + pj.cycleLength + "\" }";
+            var reply = "{ \"m1\": \"%s\", \"m2\": \"%s\", \"mrc\": \"%s\", \"cl\": \"%s\" }";
+            var json = util.format(reply, pj.led1, pj.led2, pj.movieReplayCount, pj.cycleLength);
 
-            log.debug('Charcount: ' + json.length);
+            log.debug('Reply: Chars: ' + json.length + ', content: ' + json);
 
             res.end(json);
         }

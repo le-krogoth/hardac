@@ -25,7 +25,6 @@
  ====================================================================
  */
 
-
 //---------------------------------------------------------------------------
 var config = require('./config').config;
 
@@ -36,24 +35,7 @@ crossroads.ignoreState = true;
 var url = require('url');
 var fs = require('fs');
 
-
-function onShutdown(req, res, path)
-{
-    console.log(path);
-
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-
-    shell.exec('shutdown -kh now', {silent:true}, function(code, output) {
-
-        var json = JSON.stringify({
-            info: 'Shutdown',
-            exitCode: code,
-            programOutput: output
-        });
-
-        res.end(json);
-    });
-}
+var stats = require('./libs/stats');
 
 function onRedirectToRoot(req, res, path)
 {
@@ -68,7 +50,7 @@ function onBypass(req, res, path)
 {
     console.log('URL unknown' + path);
 
-    res.writeHead(200, {'Content-Type': 'application/plain'});
+    res.writeHead(200, {'Content-Type': 'application/json'});
 
     var json = JSON.stringify({
         info: path,
@@ -79,24 +61,30 @@ function onBypass(req, res, path)
     res.end(json);
 }
 
-function randomInt (low, high) {
-    return Math.floor(Math.random() * (high - low) + low);
-}
-
 function onGetData(req, res, query)
 {
     console.log('Get Data: ' + query);
 
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    //res.setHeader('Content-Type', 'application/json');
+    switch (query) {
+        case "registeredPJs":
+            stats.sendRegisteredPJClientStats(res);
+            break;
+        case "activePJs":
+            stats.sendActivePJClientStats(res);
+            break;
+        default:
+            console.error("This query type is unknown: " + expr + ".");
 
-    var json = JSON.stringify({
-        "data1": [randomInt(1, 300), randomInt(1, 300), randomInt(1, 300), randomInt(1, 300), randomInt(1, 300)],
-        "data2": [randomInt(1, 300), randomInt(1, 300), randomInt(1, 300), randomInt(1, 300), randomInt(1, 300)],
-        "data3": [randomInt(1, 300), randomInt(1, 300), randomInt(1, 300), randomInt(1, 300), randomInt(1, 300)]
-    });
+            res.writeHead(200, {'Content-Type': 'application/json'});
 
-    res.end(json);
+            var json = JSON.stringify({
+                info: path,
+                exitCode: -1,
+                programOutput: 'query unknown'
+            });
+
+            res.end(json);
+    }
 }
 
 function onGetStaticContent(req, res, url)
