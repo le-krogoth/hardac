@@ -71,6 +71,18 @@
             <div id="chartActivePJ"></div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="one-half column">
+            <h4>Votes</h4>
+            <p>Current Votes</p>
+            <div id="chartVotes"></div>
+        </div>
+        <div class="one-half column">
+            <h4>Unused</h4>
+            <p> .</p>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -103,6 +115,19 @@
                 type: 'category',
                 categories: ['30 minutes', '2 hrs', '5 hrs', '1 day', 'longer']
             }
+        }
+    });
+
+    var chartVotes = c3.generate({
+        data: {
+            url: '/data/votes',
+            mimeType: 'json',
+            type: 'donut'
+
+        },
+        bindto: d3.select('#chartVotes'),
+        donut: {
+            title: 'votes'
         }
     });
 

@@ -19,6 +19,7 @@ var util = require('util');
 var log = require('./log').log;
 var config = require('../config').config;
 var PJ = require('./db').PJ;
+var sequelize = require('./db').sequelize;
 var moment = require('moment');
 
 
@@ -54,7 +55,38 @@ function sendRegisteredPJClientStats(res) {
             });
         });
     });
+}
 
+function sendVoteStats(res)
+{
+    res.writeHead(200, {'Content-Type': 'application/json'});
+
+    var left = 320;
+    var right = 250;
+
+
+    PJ.findAll({
+        attributes: ['ballot', [sequelize.fn('count', sequelize.col('ballot')), 'ballotcount']],
+        group: ["PJ.ballot"]
+    }).then(function (result) {
+
+        var data = "";
+        result.forEach(function(ballot)
+        {
+            if(data.length > 0)
+            {
+                data += ",";
+            }
+            data += "\"" + ballot.ballot + "\": [" + ballot.get('ballotcount') + "]";
+        });
+
+        log.info(data);
+
+        var json = util.format("{%s}", data);
+
+        res.end(json);
+
+    });
 }
 
 function sendActivePJClientStats(res) {
@@ -149,5 +181,6 @@ function sendActivePJClientStats(res) {
 // Exporting.
 module.exports = {
     sendRegisteredPJClientStats: sendRegisteredPJClientStats,
+    sendVoteStats: sendVoteStats,
     sendActivePJClientStats: sendActivePJClientStats
 };

@@ -32,6 +32,8 @@ var http = require('http');
 var crossroads = require('crossroads');
 crossroads.ignoreState = true;
 
+var log = require('./libs/log').log;
+
 var url = require('url');
 var fs = require('fs');
 
@@ -39,7 +41,7 @@ var stats = require('./libs/stats');
 
 function onRedirectToRoot(req, res, path)
 {
-    console.log('Redirect to root URL');
+    log.info('Redirect to root URL');
 
     res.writeHead(301, {"Location": '/s/index.html'});
 
@@ -48,7 +50,7 @@ function onRedirectToRoot(req, res, path)
 
 function onBypass(req, res, path)
 {
-    console.log('URL unknown' + path);
+    log.info('URL unknown' + path);
 
     res.writeHead(200, {'Content-Type': 'application/json'});
 
@@ -63,7 +65,7 @@ function onBypass(req, res, path)
 
 function onGetData(req, res, query)
 {
-    console.log('Get Data: ' + query);
+    log.info('Get Data: ' + query);
 
     switch (query) {
         case "registeredPJs":
@@ -72,8 +74,11 @@ function onGetData(req, res, query)
         case "activePJs":
             stats.sendActivePJClientStats(res);
             break;
+        case "votes":
+            stats.sendVoteStats(res);
+            break;
         default:
-            console.error("This query type is unknown: " + expr + ".");
+            log.error("This query type is unknown: " + expr + ".");
 
             res.writeHead(200, {'Content-Type': 'application/json'});
 
@@ -94,7 +99,7 @@ function onGetStaticContent(req, res, url)
     var file = 'wwwroot/' + url.replace(new RegExp('[^a-zA-Z0-9./-]+', 'g'), '');
     //file = file.replace(new RegExp('\.\.', 'g'), '');
 
-    console.log('File requested: ' + file);
+    log.info('File requested: ' + file);
 
     if(fs.existsSync(file))
     {
@@ -127,7 +132,7 @@ crossroads.bypassed.add(onBypass);
 var server = http.createServer(function (req, res)
 {
     var sUrl = url.parse(req.url).pathname;
-    console.log("URL requested: " + sUrl);
+    log.info("URL requested: " + sUrl);
     crossroads.parse(sUrl, [req, res]);
 
 });
@@ -138,4 +143,5 @@ process.on('uncaughtException', function(err)
 });
 
 server.listen(config.port_admin, config.ip_admin);
-console.log('Server running on %s:%s', config.ip_admin, config.port_admin);
+log.info("Server running at http://" + config.ip_admin + ":" + config.port_admin + "/");
+log.debug("Load the HARDAC dashboard at that url: http://" + config.ip_admin + ":" + config.port_admin + "/");
