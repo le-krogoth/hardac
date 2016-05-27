@@ -44,8 +44,7 @@
         $(document).ready(function(){
             refreshOverview();
 
-            <!-- UI Commands
-            –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+            // UI Commands   ––––––––––––––––––––––––
             $("#btn_overview").click(function(){
                 refreshOverview();
                 $("#div_overview").show();
@@ -65,8 +64,7 @@
             });
 
 
-            <!-- Commands for Backend
-            –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+            // Commands for Backend    –––––––––––––––
 
             $("#btn_clearvotes").click(function(){
                 sendClearVotes();
@@ -143,7 +141,7 @@
 
 <div class="container" id="div_functions" style="display:none;">
 
-    <h6 class="docs-header"></h6>
+    <h3 class="docs-header">Vote Functions</h3>
     <div class="docs-example">
         <div>
             <button class="button-primary" id="btn_clearvotes">Clear votes</button>
