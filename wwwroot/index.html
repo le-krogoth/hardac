@@ -75,11 +75,20 @@
             $("#btn_adddemousers").click(function(){
                 sendAddDemoUsers();
             });
-
+            $("#btn_triggermovie").click(function(){
+                triggerMovie();
+            });
         });
     </script>
 </head>
 <body>
+
+<!-- Alert / Info Box
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div id="notification" style="display: none;">
+    <span id="notificationmsg">Hey, This is my Message.</span>
+</div>
 
 <!-- Page Layout
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -141,12 +150,40 @@
 
 <div class="container" id="div_functions" style="display:none;">
 
-    <h3 class="docs-header">Vote Functions</h3>
+    <h5 class="docs-header">Vote Functions</h5>
     <div class="docs-example">
         <div>
             <button class="button-primary" id="btn_clearvotes">Clear votes</button>
+        </div>
+    </div>
+
+    <h5 class="docs-header">Movie Functions</h5>
+    <div class="row">
+        <div class="six columns">
             <button class="button-primary" id="btn_triggerredblink">Trigger red blink</button>
-            <button class="button-primary" id="btn_adddemousers">Add Demo Users</button>
+        </div>
+        <div class="six columns">
+            <select class="u-full-width" id="opt_movie">
+                <option value="m1">Movie 1</option>
+                <option value="m2">Movie 2</option>
+                <option value="m3">Movie 3</option>
+            </select>
+            <select class="u-full-width" id="opt_group">
+                <option value="-1">All</option>
+                <option value="0">Guests</option>
+                <option value="1">Speakers</option>
+                <option value="2">Staff</option>
+                <option value="4">Goons</option>
+            </select>
+            <input class="u-full-width" type="text" placeholder="Replay Count" value="0" id="txt_replayCount">
+            <button class="button-primary" id="btn_triggermovie">Trigger movie</button>
+        </div>
+    </div>
+
+    <h5 class="docs-header">Demo and Admin stuff</h5>
+    <div class="docs-example">
+        <div>
+            <button class="button" id="btn_adddemousers">Add Demo Users</button>
         </div>
     </div>
 
@@ -211,7 +248,7 @@
     {
         $.getJSON( "/fn/clear_all_votes", function( data ) {
 
-            if(data.exitCode === -1) alert(data);
+            showResponse(data);
         });
     }
 
@@ -219,7 +256,7 @@
     {
         $.getJSON( "/fn/trigger_red_blink", function( data ) {
 
-            if(data.exitCode === -1) alert(data);
+            showResponse(data);
         });
     }
 
@@ -227,8 +264,39 @@
     {
         $.getJSON( "/fn/add_demo_users", function( data ) {
 
-            if(data.exitCode === -1) alert(data);
+            showResponse(data);
         });
+    }
+
+    function triggerMovie()
+    {
+        var params = "/";
+
+        params += $('#opt_group').val();
+        params += "/" + $('#opt_movie').val();
+        params += "/" + $('#opt_movie').val();
+        params += "/" + $('#txt_replayCount').val();
+
+        $.getJSON( "/fn/trigger_movie" + params, function( data ) {
+
+            showResponse(data);
+        });
+    }
+
+    function showResponse(response)
+    {
+        if(response.exitCode === -1)
+        {
+            $("#notification").css('background-color','#fb0044');
+        }
+        else
+        {
+            $("#notification").css('background-color','#35a1fb');
+        }
+
+        $("#notificationmsg").text(response.info + ": " + response.programOutput);
+        $("#notification").fadeIn("slow").delay(2000).fadeOut();
+
     }
     /*
     setTimeout(function () {

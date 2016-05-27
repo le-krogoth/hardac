@@ -8,6 +8,28 @@
 * This file is part of HARDAC.
 */
 
+#notification {
+    font-family:Arial,Helvetica,sans-serif;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    z-index:105;
+    text-align:center;
+    font-weight:bold;
+    font-size:100%;
+    color:white;
+    padding:10px 0px 10px 0px;
+    background-color: #35a1fb;
+}
+
+#notification span {
+    text-align: center;
+    width: 95%;
+    float:left;
+}
+
+
 .navbar,
 .navbar-spacer {
     display: block;

@@ -94,12 +94,103 @@ function addDemoUsersToDB(res)
         });
 
         res.end(json);
+    }).catch(function(reason){
+
+        var json = JSON.stringify({
+            info: 'Demo Users could not be added',
+            exitCode: -1,
+            programOutput: 'Users already exist?'
+        });
+
+        res.end(json);
     });
+}
+
+function triggerMovie(res, userGroup, movie1, movie2, replayCount)
+{
+    res.writeHead(200, {'Content-Type': 'application/json'});
+
+    if( !userGroup || !movie1 || !movie2 ) {
+
+        var json = JSON.stringify({
+            info: path,
+            exitCode: -1,
+            programOutput: 'parameter missing'
+        });
+
+        res.end(json);
+        return;
+    }
+
+    if(!replayCount)
+    {
+        replayCount = 0;
+    }
+
+    var filter = {};
+    if(userGroup >= 0 && userGroup < 5)
+    {
+        filter = { group: userGroup };
+    }
+
+    // makro, no movie given, replace
+    if(movie1.startsWith('m'))
+    {
+        movie1 = makro2Movie(movie1);
+    }
+
+    // makro, no movie given, replace
+    if(movie2.startsWith('m'))
+    {
+        movie2 = makro2Movie(movie2);
+    }
+
+    PJ.update(
+        { led1: movie1, led2: movie2, movieReplayCount: replayCount },
+        { where: filter }
+    ).spread(function(affectedCount, affectedRows) {
+        // .update returns two values in an array, therefore we use .spread
+        // Notice that affectedRows will only be defined in dialects which support returning: true
+
+        //og.info(affectedCount);
+        //log.info(affectedRows);
+
+        var json = JSON.stringify({
+            info: 'Movie triggered',
+            exitCode: 0,
+            programOutput: 'affectedCount = ' + affectedCount
+        });
+
+        res.end(json);
+    });
+
+    function makro2Movie(makro)
+    {
+        var ret = "";
+
+        switch(makro)
+        {
+            case "m1":
+                ret = "F0010002F0020002F0020002";
+                break;
+            case "m2":
+                ret = "F0020002F0020002F0020002";
+                break;
+            case "m3":
+                ret = "F0030002F0020002F0020002";
+                break;
+            default:
+                ret = "F00A0002F0020002F0020002";
+        }
+
+        return ret;
+    }
 }
 
 // Exporting.
 module.exports = {
     clearAllVotes: clearAllVotes,
     triggerRedBlink: triggerRedBlink,
-    addDemoUsersToDB: addDemoUsersToDB
+    addDemoUsersToDB: addDemoUsersToDB,
+    triggerMovie: triggerMovie
 };

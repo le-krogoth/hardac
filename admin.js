@@ -93,7 +93,7 @@ function onGetData(req, res, query)
     }
 }
 
-function onExecFunction(req, res, fnct)
+function onExecFunction(req, res, fnct, param1, param2, param3, param4)
 {
     log.info('Exec Function: ' + fnct);
 
@@ -106,6 +106,9 @@ function onExecFunction(req, res, fnct)
             break;
         case "add_demo_users":
             fncts.addDemoUsersToDB(res);
+            break;
+        case "trigger_movie":
+            fncts.triggerMovie(res, param1, param2, param3, param4);
             break;
         default:
             log.error("This function type is unknown: " + fnct + ".");
@@ -151,7 +154,7 @@ function onGetStaticContent(req, res, url)
 
 // -----------------------------------------------------------------------------
 crossroads.addRoute('/data/{query}', onGetData);
-crossroads.addRoute('/fn/{fnct}', onExecFunction);
+crossroads.addRoute('/fn/{fnct}/:param1:/:param2:/:param3:/:param4:', onExecFunction);
 
 crossroads.addRoute('/s/{url*}', onGetStaticContent);
 
