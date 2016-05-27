@@ -38,6 +38,7 @@ var url = require('url');
 var fs = require('fs');
 
 var stats = require('./libs/stats');
+var fncts = require('./libs/functions');
 
 function onRedirectToRoot(req, res, path)
 {
@@ -50,7 +51,7 @@ function onRedirectToRoot(req, res, path)
 
 function onBypass(req, res, path)
 {
-    log.info('URL unknown' + path);
+    log.info('URL unknown: ' + path);
 
     res.writeHead(200, {'Content-Type': 'application/json'});
 
@@ -78,7 +79,7 @@ function onGetData(req, res, query)
             stats.sendVoteStats(res);
             break;
         default:
-            log.error("This query type is unknown: " + expr + ".");
+            log.error("This query type is unknown: " + query + ".");
 
             res.writeHead(200, {'Content-Type': 'application/json'});
 
@@ -86,6 +87,35 @@ function onGetData(req, res, query)
                 info: path,
                 exitCode: -1,
                 programOutput: 'query unknown'
+            });
+
+            res.end(json);
+    }
+}
+
+function onExecFunction(req, res, fnct)
+{
+    log.info('Exec Function: ' + fnct);
+
+    switch (fnct) {
+        case "clear_all_votes":
+            fncts.clearAllVotes(res);
+            break;
+        case "trigger_red_blink":
+            fncts.triggerRedBlink(res);
+            break;
+        case "add_demo_users":
+            fncts.addDemoUsersToDB(res);
+            break;
+        default:
+            log.error("This function type is unknown: " + fnct + ".");
+
+            res.writeHead(200, {'Content-Type': 'application/json'});
+
+            var json = JSON.stringify({
+                info: path,
+                exitCode: -1,
+                programOutput: 'fnct unknown'
             });
 
             res.end(json);
@@ -121,6 +151,7 @@ function onGetStaticContent(req, res, url)
 
 // -----------------------------------------------------------------------------
 crossroads.addRoute('/data/{query}', onGetData);
+crossroads.addRoute('/fn/{fnct}', onExecFunction);
 
 crossroads.addRoute('/s/{url*}', onGetStaticContent);
 

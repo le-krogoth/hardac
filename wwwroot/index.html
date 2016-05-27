@@ -29,17 +29,61 @@
     <link href="/s/css/c3.css" rel="stylesheet" type="text/css">
 
     <!-- Load d3.js and c3.js -->
+    <script src="/s/js/jquery.min.js" charset="utf-8"></script>
     <script src="/s/js/d3.min.js" charset="utf-8"></script>
-    <script src="/s/js/c3.min.js"></script>
+    <script src="/s/js/c3.min.js" charset="utf-8"></script>
 
     <!-- Favicon
     ––––––––––––––––––––––––––––––––––––––––––––––––––
     <link rel="icon" type="image/png" href="images/favicon.png">
     -->
+
+    <!-- Event Binding
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script>
+        $(document).ready(function(){
+            refreshOverview();
+
+            <!-- UI Commands
+            –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+            $("#btn_overview").click(function(){
+                refreshOverview();
+                $("#div_overview").show();
+                $("#div_votes").hide();
+                $("#div_functions").hide();
+            });
+            $("#btn_votes").click(function(){
+                refreshVotes();
+                $("#div_overview").hide();
+                $("#div_votes").show();
+                $("#div_functions").hide();
+            });
+            $("#btn_functions").click(function(){
+                $("#div_overview").hide();
+                $("#div_votes").hide();
+                $("#div_functions").show();
+            });
+
+
+            <!-- Commands for Backend
+            –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+            $("#btn_clearvotes").click(function(){
+                sendClearVotes();
+            });
+            $("#btn_triggerredblink").click(function(){
+                sendTriggerRedBlink();
+            });
+            $("#btn_adddemousers").click(function(){
+                sendAddDemoUsers();
+            });
+
+        });
+    </script>
 </head>
 <body>
 
-<!-- Primary Page Layout
+<!-- Page Layout
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
 <div class="section get-help">
@@ -52,13 +96,17 @@
 <nav class="navbar">
     <div class="container">
         <ul class="navbar-list">
-            <li class="navbar-item"><a class="navbar-link" href="#overview">Overview</a></li>
-            <li class="navbar-item"><a class="navbar-link" href="#votes">Votes</a></li>
+            <li class="navbar-item"><a class="navbar-link" id="btn_overview">Overview</a></li>
+            <li class="navbar-item"><a class="navbar-link" id="btn_votes">Votes</a></li>
+            <li class="navbar-item"><a class="navbar-link" id="btn_functions">Functions</a></li>
         </ul>
     </div>
 </nav>
 
-<div class="container">
+<!-- OVERVIEW
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div class="container" id="div_overview">
     <div class="row">
         <div class="one-half column">
             <h4>Registered PJs</h4>
@@ -71,7 +119,12 @@
             <div id="chartActivePJ"></div>
         </div>
     </div>
+</div>
 
+<!-- VOTES
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div class="container" id="div_votes" style="display:none;">
     <div class="row">
         <div class="one-half column">
             <h4>Votes</h4>
@@ -85,52 +138,100 @@
     </div>
 </div>
 
+<!-- FUNCTIONS
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div class="container" id="div_functions" style="display:none;">
+
+    <h6 class="docs-header"></h6>
+    <div class="docs-example">
+        <div>
+            <button class="button-primary" id="btn_clearvotes">Clear votes</button>
+            <button class="button-primary" id="btn_triggerredblink">Trigger red blink</button>
+            <button class="button-primary" id="btn_adddemousers">Add Demo Users</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Scripts
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
 <script type="text/javascript">
 
-    var chartRegPJ = c3.generate({
-        data: {
-            url: '/data/registeredPJs',
-            mimeType: 'json',
-            type: 'bar'
-        },
-        bindto: d3.select('#chartRegPJ'),
-        axis: {
-            x: {
-                type: 'category',
-                categories: ['users', 'speakers', 'staff', 'goons']
+    function refreshOverview()
+    {
+        var chartRegPJ = c3.generate({
+            data: {
+                url: '/data/registeredPJs',
+                mimeType: 'json',
+                type: 'bar'
+            },
+            bindto: d3.select('#chartRegPJ'),
+            axis: {
+                x: {
+                    type: 'category',
+                    categories: ['users', 'speakers', 'staff', 'goons']
+                }
             }
-        }
-    });
+        });
 
-    var chartActivePJ = c3.generate({
-        data: {
-            url: '/data/activePJs',
-            mimeType: 'json',
-            type: 'bar'
+        var chartActivePJ = c3.generate({
+            data: {
+                url: '/data/activePJs',
+                mimeType: 'json',
+                type: 'bar'
 
-        },
-        bindto: d3.select('#chartActivePJ'),
-        axis: {
-            x: {
-                type: 'category',
-                categories: ['30 minutes', '2 hrs', '5 hrs', '1 day', 'longer']
+            },
+            bindto: d3.select('#chartActivePJ'),
+            axis: {
+                x: {
+                    type: 'category',
+                    categories: ['30 minutes', '2 hrs', '5 hrs', '1 day', 'longer']
+                }
             }
-        }
-    });
+        });
+    }
 
-    var chartVotes = c3.generate({
-        data: {
-            url: '/data/votes',
-            mimeType: 'json',
-            type: 'donut'
+    function refreshVotes()
+    {
+        var chartVotes = c3.generate({
+            data: {
+                url: '/data/votes',
+                mimeType: 'json',
+                type: 'donut'
 
-        },
-        bindto: d3.select('#chartVotes'),
-        donut: {
-            title: 'votes'
-        }
-    });
+            },
+            bindto: d3.select('#chartVotes'),
+            donut: {
+                title: 'votes'
+            }
+        });
+    }
 
+    function sendClearVotes()
+    {
+        $.getJSON( "/fn/clear_all_votes", function( data ) {
+
+            if(data.exitCode === -1) alert(data);
+        });
+    }
+
+    function sendTriggerRedBlink()
+    {
+        $.getJSON( "/fn/trigger_red_blink", function( data ) {
+
+            if(data.exitCode === -1) alert(data);
+        });
+    }
+
+    function sendAddDemoUsers()
+    {
+        $.getJSON( "/fn/add_demo_users", function( data ) {
+
+            if(data.exitCode === -1) alert(data);
+        });
+    }
     /*
     setTimeout(function () {
         chart.groups([['data1', 'data2', 'data3']])

@@ -61,10 +61,6 @@ function sendVoteStats(res)
 {
     res.writeHead(200, {'Content-Type': 'application/json'});
 
-    var left = 320;
-    var right = 250;
-
-
     PJ.findAll({
         attributes: ['ballot', [sequelize.fn('count', sequelize.col('ballot')), 'ballotcount']],
         group: ["PJ.ballot"]
