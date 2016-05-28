@@ -134,13 +134,13 @@ function triggerMovie(res, userGroup, movie1, movie2, replayCount)
     }
 
     // makro, no movie given, replace
-    if(movie1.startsWith('m'))
+    if(movie1.indexOf('m') === 0)
     {
         movie1 = makro2Movie(movie1);
     }
 
     // makro, no movie given, replace
-    if(movie2.startsWith('m'))
+    if(movie2.indexOf('m') === 0)
     {
         movie2 = makro2Movie(movie2);
     }
