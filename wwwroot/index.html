@@ -124,6 +124,7 @@
             var s = Snap("#svg");
             // Lets create big circle in the middle:
             ledLeft = s.circle(55, 55, 20);
+
             // By default its black, lets change its attributes
             ledLeft.attr({
                 fill: "#fff",
@@ -138,7 +139,7 @@
                 //console.log(movie.charAt(i + 2));
                 //console.log(movie.charAt(i + 3));
 
-                var frame = {r: c2hex(movie.charAt(i + 2)), g:c2hex(movie.charAt(i)), b:c2hex(movie.charAt(i + 1)), pos:framePos };
+                var frame = {r: (c2dec(movie.charAt(i)) * 15), g: (c2dec(movie.charAt(i + 1)) * 15), b: (c2dec(movie.charAt(i + 2)) * 15), pos:framePos };
 
                 framePos += (c2dec(movie.charAt(i + 3)) * 1);
 
@@ -149,7 +150,7 @@
 
             movieLength = framePos;
 
-            console.log(JSON.stringify(movieFrames, null, "  "));
+            //console.log(JSON.stringify(movieFrames, null, "  "));
 
             animation = setInterval(myInterval, 200);
         }
@@ -161,12 +162,10 @@
             ledLeft.attr({
                 fill: "#fff"
             });
-
         }
 
         function myInterval()
         {
-
             for(k = 0; k < movieFrames.length; k++)
             {
                 var frame = movieFrames[k];
@@ -174,7 +173,9 @@
 
                 if(frame.pos == moviePosition)
                 {
-                    var colour = "#" + pad(frame.r) + pad(frame.g) + pad(frame.b);
+                    console.log(Snap.rgb(pad(frame.r), pad(frame.g), pad(frame.b)));
+                    //var colour = "#" + pad(frame.r) + pad(frame.g) + pad(frame.b);
+                    var colour = Snap.rgb(frame.r, frame.g, frame.b);
 
                     ledLeft.attr({
                         fill: colour
@@ -311,7 +312,7 @@
             <svg id="svg"></svg>
         </div>
         <div class="six columns">
-            <textarea class="u-full-width" placeholder="The movie to play" id="txt_movie">500A050A005A555A055200520002700100017001000170010001</textarea>
+            <textarea class="u-full-width" placeholder="The movie to play" id="txt_movie">F00A0F0A00FA555A0FF200F20002F0010001F0010001F0010001</textarea>
             <button class="button-primary" id="btn_startBlink">Start Movie</button>
             <button class="button-primary" id="btn_stopBlink">Stop Movie</button>
         </div>
