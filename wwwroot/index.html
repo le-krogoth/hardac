@@ -32,6 +32,7 @@
     <script src="/s/js/jquery.min.js" charset="utf-8"></script>
     <script src="/s/js/d3.min.js" charset="utf-8"></script>
     <script src="/s/js/c3.min.js" charset="utf-8"></script>
+    <script src="/s/js/snap.svg-min.js" charset="utf-8"></script>
 
     <!-- Favicon
     ––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -78,7 +79,154 @@
             $("#btn_triggermovie").click(function(){
                 triggerMovie();
             });
+
+            // Commands for Movies    –––––––––––––––
+
+            $("#btn_startBlink").click(function(){
+                startMovie();
+            });
+
+            $("#btn_stopBlink").click(function(){
+                stopMovie();
+            });
+
         });
+
+
+        var ledLeft, ledRight;
+        var animation;
+        var moviePosition = 0;
+        var movie = "500255025552055200520002700100017001000170010001";
+
+        var movieFrames = [];
+        var framePos = 0;
+        var i = 0;
+        var movieLength = 0;
+
+        function startMovie()
+        {
+            movie = $("#txt_movie").val();
+            movieFrames = [];
+            framePos = 0;
+            i = 0;
+            movieLength = 0;
+            moviePosition = 0;
+
+            if(movie.length % 4 != 0)
+            {
+                console.log("Movie file not consistent");
+                return;
+            }
+
+            // First lets create our drawing surface out of existing SVG element
+            // If you want to create new surface just provide dimensions
+            // like s = Snap(800, 600);
+            var s = Snap("#svg");
+            // Lets create big circle in the middle:
+            ledLeft = s.circle(55, 55, 20);
+            // By default its black, lets change its attributes
+            ledLeft.attr({
+                fill: "#fff",
+                stroke: "#000",
+                strokeWidth: 1
+            });
+
+            while (i < movie.length)
+            {
+                //console.log(movie.charAt(i));
+                //console.log(movie.charAt(i + 1));
+                //console.log(movie.charAt(i + 2));
+                //console.log(movie.charAt(i + 3));
+
+                var frame = {r: c2hex(movie.charAt(i + 2)), g:c2hex(movie.charAt(i)), b:c2hex(movie.charAt(i + 1)), pos:framePos };
+
+                framePos += (c2dec(movie.charAt(i + 3)) * 1);
+
+                movieFrames.push(frame);
+
+                i = i + 4;
+            }
+
+            movieLength = framePos;
+
+            console.log(JSON.stringify(movieFrames, null, "  "));
+
+            animation = setInterval(myInterval, 200);
+        }
+
+        function stopMovie()
+        {
+            clearInterval(animation);
+
+            ledLeft.attr({
+                fill: "#fff"
+            });
+
+        }
+
+        function myInterval()
+        {
+
+            for(k = 0; k < movieFrames.length; k++)
+            {
+                var frame = movieFrames[k];
+                //console.log("frame.pos.k: " + frame.pos);
+
+                if(frame.pos == moviePosition)
+                {
+                    var colour = "#" + pad(frame.r) + pad(frame.g) + pad(frame.b);
+
+                    ledLeft.attr({
+                        fill: colour
+                    });
+                }
+                if(moviePosition < frame.pos)
+                {
+                    break;
+                }
+            }
+
+            moviePosition++;
+            if(moviePosition >= movieLength)
+            {
+                moviePosition = 0;
+            }
+        }
+
+        function pad(str) {
+
+            var pad = '00';
+            var padLeft = true;
+
+            if (typeof str === 'undefined')
+            {
+                return pad;
+            }
+
+            if (padLeft)
+            {
+                return (pad + str).slice(-pad.length);
+            }
+            else
+            {
+                return (str + pad).substring(0, pad.length);
+            }
+        }
+
+        function c2dec(value)
+        {
+            return parseInt(value, 16);
+        }
+
+        function c2hex(value)
+        {
+            var dec = c2dec(value);
+
+            dec = 255 - (dec * 15);
+
+            return dec.toString(16);
+        }
+
     </script>
 </head>
 <body>
@@ -154,6 +302,18 @@
     <div class="docs-example">
         <div>
             <button class="button-primary" id="btn_clearvotes">Clear votes</button>
+        </div>
+    </div>
+
+    <h5 class="docs-header">Movie Functions</h5>
+    <div class="row">
+        <div class="six columns">
+            <svg id="svg"></svg>
+        </div>
+        <div class="six columns">
+            <textarea class="u-full-width" placeholder="The movie to play" id="txt_movie">500A050A005A555A055200520002700100017001000170010001</textarea>
+            <button class="button-primary" id="btn_startBlink">Start Movie</button>
+            <button class="button-primary" id="btn_stopBlink">Stop Movie</button>
         </div>
     </div>
 
