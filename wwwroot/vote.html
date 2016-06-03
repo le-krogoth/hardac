@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>HARDAC</title>
+    <meta name="description" content="HARDAC backend for PJs">
+    <meta name="author" content="le_krogoth for the ministry of zombie defense">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    ––––––––––––––––––––––––––––––––––––––––––––––––––
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+    -->
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="/s/css/normalize.css">
+    <link rel="stylesheet" href="/s/css/skeleton.css">
+    <link rel="stylesheet" href="/s/css/c3.min.css">
+    <link rel="stylesheet" href="/s/css/hardac.css">
+
+    <!-- Load c3.css -->
+    <link href="/s/css/c3.css" rel="stylesheet" type="text/css">
+
+    <!-- Load d3.js and c3.js -->
+    <script src="/s/js/jquery.min.js" charset="utf-8"></script>
+    <script src="/s/js/d3.min.js" charset="utf-8"></script>
+    <script src="/s/js/c3.min.js" charset="utf-8"></script>
+    <script src="/s/js/snap.svg-min.js" charset="utf-8"></script>
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="/s/favicon.ico">
+
+    <!-- Event Binding
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script>
+        $(document).ready(function(){
+            refreshVotes();
+        });
+    </script>
+</head>
+<body>
+
+<!-- Alert / Info Box
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div id="notification" style="display: none;">
+    <span id="notificationmsg">Hey, This is my Message.</span>
+</div>
+
+<!-- Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div class="section get-help">
+    <div class="container">
+        <h3 class="section-heading">HARDAC</h3>
+    </div>
+</div>
+
+<!-- VOTES
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div class="container" id="div_votes">
+    <div class="row">
+        <div class="full column">
+            <h4>Votes</h4>
+            <div id="chartVotes"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<script type="text/javascript">
+
+    function refreshVotes()
+    {
+        var chartVotes = c3.generate({
+            data: {
+                url: '/data/votes',
+                mimeType: 'json',
+                type: 'donut'
+
+            },
+            bindto: d3.select('#chartVotes'),
+            donut: {
+                title: 'votes'
+            }
+        });
+    }
+
+    function showResponse(response)
+    {
+        if(response.exitCode === -1)
+        {
+            $("#notification").css('background-color','#fb0044');
+        }
+        else
+        {
+            $("#notification").css('background-color','#35a1fb');
+        }
+
+        $("#notificationmsg").text(response.info + ": " + response.programOutput);
+        $("#notification").fadeIn("slow").delay(2000).fadeOut();
+
+    }
+    /*
+    setTimeout(function () {
+        chart.groups([['data1', 'data2', 'data3']])
+    }, 1000);
+
+    setTimeout(function () {
+        chart.load({
+            columns: [['data4', 100, -50, 150, 200, -300, -100]]
+        });
+    }, 1500);
+
+    setTimeout(function () {
+        chart.groups([['data1', 'data2', 'data3', 'data4']])
+    }, 2000);
+*/
+</script>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

@@ -130,7 +130,10 @@ function onGetStaticContent(req, res, url)
     //res.writeHead(200, {'Content-Type': 'text/plain'});
 
     var file = 'wwwroot/' + url.replace(new RegExp('[^a-zA-Z0-9./-]+', 'g'), '');
-    //file = file.replace(new RegExp('\.\.', 'g'), '');
+    while(file.indexOf('..') != -1)
+    {
+        file.replace('..', '.');
+    }
 
     log.info('File requested: ' + file);
 

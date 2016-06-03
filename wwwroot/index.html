@@ -6,8 +6,8 @@
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <meta charset="utf-8">
     <title>HARDAC</title>
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="HARDAC backend for PJs">
+    <meta name="author" content="le_krogoth for the ministry of zombie defense">
 
     <!-- Mobile Specific Metas
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -35,9 +35,8 @@
     <script src="/s/js/snap.svg-min.js" charset="utf-8"></script>
 
     <!-- Favicon
-    ––––––––––––––––––––––––––––––––––––––––––––––––––
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    -->
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="/s/favicon.ico">
 
     <!-- Event Binding
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -123,7 +122,7 @@
             // like s = Snap(800, 600);
             var s = Snap("#svg");
             // Lets create big circle in the middle:
-            ledLeft = s.circle(55, 55, 20);
+            ledLeft = s.circle(30, 30, 20);
 
             // By default its black, lets change its attributes
             ledLeft.attr({
@@ -152,7 +151,7 @@
 
             //console.log(JSON.stringify(movieFrames, null, "  "));
 
-            animation = setInterval(myInterval, 200);
+            animation = setInterval(movieInterval, 200);
         }
 
         function stopMovie()
@@ -164,7 +163,7 @@
             });
         }
 
-        function myInterval()
+        function movieInterval()
         {
             for(k = 0; k < movieFrames.length; k++)
             {
@@ -173,8 +172,7 @@
 
                 if(frame.pos == moviePosition)
                 {
-                    console.log(Snap.rgb(pad(frame.r), pad(frame.g), pad(frame.b)));
-                    //var colour = "#" + pad(frame.r) + pad(frame.g) + pad(frame.b);
+                    // console.log(Snap.rgb(pad(frame.r), pad(frame.g), pad(frame.b)));
                     var colour = Snap.rgb(frame.r, frame.g, frame.b);
 
                     ledLeft.attr({
@@ -191,26 +189,6 @@
             if(moviePosition >= movieLength)
             {
                 moviePosition = 0;
-            }
-        }
-
-        function pad(str) {
-
-            var pad = '00';
-            var padLeft = true;
-
-            if (typeof str === 'undefined')
-            {
-                return pad;
-            }
-
-            if (padLeft)
-            {
-                return (pad + str).slice(-pad.length);
-            }
-            else
-            {
-                return (str + pad).substring(0, pad.length);
             }
         }
 
@@ -244,7 +222,7 @@
 
 <div class="section get-help">
     <div class="container">
-        <h3 class="section-heading">Hardac</h3>
+        <h3 class="section-heading">HARDAC</h3>
     </div>
 </div>
 
@@ -254,6 +232,7 @@
         <ul class="navbar-list">
             <li class="navbar-item"><a class="navbar-link" id="btn_overview">Overview</a></li>
             <li class="navbar-item"><a class="navbar-link" id="btn_votes">Votes</a></li>
+            <li class="navbar-item"><a class="navbar-link" id="btn_vote4beamers" href="vote.html">Vote for Beamers</a></li>
             <li class="navbar-item"><a class="navbar-link" id="btn_functions">Functions</a></li>
         </ul>
     </div>
@@ -310,21 +289,13 @@
     <div class="row">
         <div class="six columns">
             <svg id="svg"></svg>
-        </div>
-        <div class="six columns">
             <textarea class="u-full-width" placeholder="The movie to play" id="txt_movie">F00A0F0A00FA555A0FF200F20002F0010001F0010001F0010001</textarea>
-            <button class="button-primary" id="btn_startBlink">Start Movie</button>
-            <button class="button-primary" id="btn_stopBlink">Stop Movie</button>
-        </div>
-    </div>
-
-    <h5 class="docs-header">Movie Functions</h5>
-    <div class="row">
-        <div class="six columns">
-            <button class="button-primary" id="btn_triggerredblink">Trigger red blink</button>
+            <button class="button-primary" id="btn_startBlink">Start Movie Test</button>
+            <button class="button-primary" id="btn_stopBlink">Stop Movie Test</button>
         </div>
         <div class="six columns">
             <select class="u-full-width" id="opt_movie">
+                <option value="xx">Movie from the left</option>
                 <option value="m1">Movie 1</option>
                 <option value="m2">Movie 2</option>
                 <option value="m3">Movie 3</option>
@@ -338,6 +309,7 @@
             </select>
             <input class="u-full-width" type="text" placeholder="Replay Count" value="0" id="txt_replayCount">
             <button class="button-primary" id="btn_triggermovie">Trigger movie</button>
+            <button class="button-primary" id="btn_triggerredblink">Trigger red blink</button>
         </div>
     </div>
 
@@ -433,10 +405,23 @@
     {
         var params = "/";
 
-        params += $('#opt_group').val();
-        params += "/" + $('#opt_movie').val();
-        params += "/" + $('#opt_movie').val();
-        params += "/" + $('#txt_replayCount').val();
+        // check selected movie
+        var selectedMovie = $('#opt_movie').val();
+        var manualMovie = $('#txt_movie').val();
+        if(selectedMovie.indexOf('m') === 0 || manualMovie.length % 4 != 0 )
+        {
+            params += $('#opt_group').val();
+            params += "/" + $('#opt_movie').val();
+            params += "/" + $('#opt_movie').val();
+            params += "/" + $('#txt_replayCount').val();
+        }
+        else
+        {
+            params += $('#opt_group').val();
+            params += "/" + manualMovie;
+            params += "/" + manualMovie;
+            params += "/" + $('#txt_replayCount').val();
+        }
 
         $.getJSON( "/fn/trigger_movie" + params, function( data ) {
 
