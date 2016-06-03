@@ -133,6 +133,10 @@ function triggerMovie(res, userGroup, movie1, movie2, replayCount)
         filter = { group: userGroup };
     }
 
+    // clean it to not get any special chars
+    movie1 = movie1.replace(new RegExp('[^a-zA-Z0-9+', 'g'), '');
+    movie2 = movie2.replace(new RegExp('[^a-zA-Z0-9+', 'g'), '');
+
     // makro, no movie given, replace
     if(movie1.indexOf('m') === 0)
     {
@@ -152,7 +156,7 @@ function triggerMovie(res, userGroup, movie1, movie2, replayCount)
         // .update returns two values in an array, therefore we use .spread
         // Notice that affectedRows will only be defined in dialects which support returning: true
 
-        //og.info(affectedCount);
+        //log.info(affectedCount);
         //log.info(affectedRows);
 
         var json = JSON.stringify({
