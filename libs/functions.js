@@ -134,8 +134,8 @@ function triggerMovie(res, userGroup, movie1, movie2, replayCount)
     }
 
     // clean it to not get any special chars
-    movie1 = movie1.replace(new RegExp('[^a-zA-Z0-9+', 'g'), '');
-    movie2 = movie2.replace(new RegExp('[^a-zA-Z0-9+', 'g'), '');
+    movie1 = movie1.replace(new RegExp('[^a-zA-Z0-9]+', 'g'), '');
+    movie2 = movie2.replace(new RegExp('[^a-zA-Z0-9]+', 'g'), '');
 
     // makro, no movie given, replace
     if(movie1.indexOf('m') === 0)
