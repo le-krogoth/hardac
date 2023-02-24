@@ -1,10 +1,13 @@
 HARDAC
 ======
 
-Copyright (c) 2016 by Krogoth of
+Copyright (c) 2016-23 by Krogoth of
 Ministry of Zombie Defense - http://www.mzd.org.uk/
 and contributing authors
- 
+
+## Archived ##
+This repo is getting old and there is no plan (nor need) to work on this codebase anymore. It is therefore archived.  
+
 ## Installation ##
 Get a copy of node.js and npm on your system of choice. If you are using Debian, this should work:
 
